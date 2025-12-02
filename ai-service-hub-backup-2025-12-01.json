@@ -1,0 +1,490 @@
+{
+  "categories": [
+    {
+      "id": "cat-agent",
+      "name": "AI Agent",
+      "icon": "🤖",
+      "order": 1,
+      "collapsed": false
+    },
+    {
+      "id": "cat-image",
+      "name": "Image",
+      "icon": "🖼️",
+      "order": 2,
+      "collapsed": false
+    },
+    {
+      "id": "cat-video",
+      "name": "Video",
+      "icon": "🎬",
+      "order": 3,
+      "collapsed": false
+    },
+    {
+      "id": "cat-voice",
+      "name": "Voice/Lip-Sync",
+      "icon": "🎤",
+      "order": 4,
+      "collapsed": false
+    },
+    {
+      "id": "cat-coding",
+      "name": "Vibe Coding",
+      "icon": "💻",
+      "order": 5,
+      "collapsed": false
+    },
+    {
+      "id": "cat-music",
+      "name": "Music",
+      "icon": "🎵",
+      "order": 6,
+      "collapsed": false
+    },
+    {
+      "id": "cat-edit",
+      "name": "Edit",
+      "icon": "✂️",
+      "order": 7,
+      "collapsed": false
+    },
+    {
+      "id": "cat-business",
+      "name": "Business",
+      "icon": "💼",
+      "order": 8,
+      "collapsed": false
+    },
+    {
+      "id": "cat-1764470995010-du8kfkzgp",
+      "name": "Google",
+      "icon": "📁",
+      "order": 0,
+      "collapsed": false
+    }
+  ],
+  "services": [
+    {
+      "id": "svc-001",
+      "categoryId": "cat-agent",
+      "name": "ChatGPT",
+      "url": "https://chat.openai.com",
+      "icon": "https://www.google.com/s2/favicons?domain=chat.openai.com&sz=64",
+      "order": 1
+    },
+    {
+      "id": "svc-002",
+      "categoryId": "cat-agent",
+      "name": "Perplexity",
+      "url": "https://perplexity.ai",
+      "icon": "https://www.google.com/s2/favicons?domain=perplexity.ai&sz=64",
+      "order": 4
+    },
+    {
+      "id": "svc-003",
+      "categoryId": "cat-agent",
+      "name": "Gemini",
+      "url": "https://gemini.google.com",
+      "icon": "https://www.google.com/s2/favicons?domain=gemini.google.com&sz=64",
+      "order": 0
+    },
+    {
+      "id": "svc-004",
+      "categoryId": "cat-agent",
+      "name": "Claude",
+      "url": "https://claude.ai",
+      "icon": "https://www.google.com/s2/favicons?domain=claude.ai&sz=64",
+      "order": 2
+    },
+    {
+      "id": "svc-005",
+      "categoryId": "cat-agent",
+      "name": "Grok",
+      "url": "https://grok.x.ai",
+      "icon": "https://www.google.com/s2/favicons?domain=grok.x.ai&sz=64",
+      "order": 3
+    },
+    {
+      "id": "svc-006",
+      "categoryId": "cat-agent",
+      "name": "Genspark",
+      "url": "https://genspark.ai",
+      "icon": "https://www.google.com/s2/favicons?domain=genspark.ai&sz=64",
+      "order": 5
+    },
+    {
+      "id": "svc-007",
+      "categoryId": "cat-agent",
+      "name": "Flowith",
+      "url": "https://flowith.io",
+      "icon": "https://www.google.com/s2/favicons?domain=flowith.io&sz=64",
+      "order": 6
+    },
+    {
+      "id": "svc-010",
+      "categoryId": "cat-image",
+      "name": "Midjourney",
+      "url": "https://midjourney.com",
+      "icon": "https://www.google.com/s2/favicons?domain=midjourney.com&sz=64",
+      "order": 2
+    },
+    {
+      "id": "svc-011",
+      "categoryId": "cat-image",
+      "name": "Nano Banana",
+      "url": "https://nanobanana.com",
+      "icon": "https://www.google.com/s2/favicons?domain=nanobanana.com&sz=64",
+      "order": 0
+    },
+    {
+      "id": "svc-012",
+      "categoryId": "cat-image",
+      "name": "Imagine Art",
+      "url": "https://imagine.art",
+      "icon": "https://www.google.com/s2/favicons?domain=imagine.art&sz=64",
+      "order": 4
+    },
+    {
+      "id": "svc-013",
+      "categoryId": "cat-image",
+      "name": "Sora",
+      "url": "https://openai.com/sora",
+      "icon": "https://www.google.com/s2/favicons?domain=openai.com&sz=64",
+      "order": 3
+    },
+    {
+      "id": "svc-014",
+      "categoryId": "cat-image",
+      "name": "Flux",
+      "url": "https://flux.ai",
+      "icon": "https://www.google.com/s2/favicons?domain=flux.ai&sz=64",
+      "order": 5
+    },
+    {
+      "id": "svc-015",
+      "categoryId": "cat-image",
+      "name": "Whisk",
+      "url": "https://labs.google/whisk",
+      "icon": "https://www.google.com/s2/favicons?domain=labs.google&sz=64",
+      "order": 1
+    },
+    {
+      "id": "svc-016",
+      "categoryId": "cat-image",
+      "name": "Dreamina",
+      "url": "https://dreamina.capcut.com",
+      "icon": "https://www.google.com/s2/favicons?domain=dreamina.capcut.com&sz=64",
+      "order": 6
+    },
+    {
+      "id": "svc-017",
+      "categoryId": "cat-image",
+      "name": "Qwen",
+      "url": "https://qwen.ai",
+      "icon": "https://www.google.com/s2/favicons?domain=qwen.ai&sz=64",
+      "order": 7
+    },
+    {
+      "id": "svc-030",
+      "categoryId": "cat-video",
+      "name": "Sora 2",
+      "url": "https://openai.com/sora",
+      "icon": "https://www.google.com/s2/favicons?domain=openai.com&sz=64",
+      "order": 1
+    },
+    {
+      "id": "svc-031",
+      "categoryId": "cat-video",
+      "name": "VEO 3",
+      "url": "https://deepmind.google/technologies/veo",
+      "icon": "https://www.google.com/s2/favicons?domain=deepmind.google&sz=64",
+      "order": 0
+    },
+    {
+      "id": "svc-032",
+      "categoryId": "cat-video",
+      "name": "Midjourney",
+      "url": "https://midjourney.com",
+      "icon": "https://www.google.com/s2/favicons?domain=midjourney.com&sz=64",
+      "order": 3
+    },
+    {
+      "id": "svc-033",
+      "categoryId": "cat-video",
+      "name": "Hailuo",
+      "url": "https://hailuoai.video",
+      "icon": "https://www.google.com/s2/favicons?domain=hailuoai.video&sz=64",
+      "order": 4
+    },
+    {
+      "id": "svc-034",
+      "categoryId": "cat-video",
+      "name": "Higgsfield",
+      "url": "https://higgsfield.ai",
+      "icon": "https://www.google.com/s2/favicons?domain=higgsfield.ai&sz=64",
+      "order": 5
+    },
+    {
+      "id": "svc-035",
+      "categoryId": "cat-video",
+      "name": "Kling",
+      "url": "https://klingai.com",
+      "icon": "https://www.google.com/s2/favicons?domain=klingai.com&sz=64",
+      "order": 6
+    },
+    {
+      "id": "svc-036",
+      "categoryId": "cat-video",
+      "name": "Runway",
+      "url": "https://runwayml.com",
+      "icon": "https://www.google.com/s2/favicons?domain=runwayml.com&sz=64",
+      "order": 2
+    },
+    {
+      "id": "svc-037",
+      "categoryId": "cat-video",
+      "name": "Pika Labs",
+      "url": "https://pika.art",
+      "icon": "https://www.google.com/s2/favicons?domain=pika.art&sz=64",
+      "order": 7
+    },
+    {
+      "id": "svc-038",
+      "categoryId": "cat-video",
+      "name": "Luma AI",
+      "url": "https://lumalabs.ai",
+      "icon": "https://www.google.com/s2/favicons?domain=lumalabs.ai&sz=64",
+      "order": 8
+    },
+    {
+      "id": "svc-039",
+      "categoryId": "cat-video",
+      "name": "Topaz",
+      "url": "https://topazlabs.com",
+      "icon": "https://www.google.com/s2/favicons?domain=topazlabs.com&sz=64",
+      "order": 9
+    },
+    {
+      "id": "svc-040",
+      "categoryId": "cat-video",
+      "name": "Freepik",
+      "url": "https://freepik.com",
+      "icon": "https://www.google.com/s2/favicons?domain=freepik.com&sz=64",
+      "order": 10
+    },
+    {
+      "id": "svc-050",
+      "categoryId": "cat-voice",
+      "name": "ElevenLabs",
+      "url": "https://elevenlabs.io",
+      "icon": "https://www.google.com/s2/favicons?domain=elevenlabs.io&sz=64",
+      "order": 0
+    },
+    {
+      "id": "svc-051",
+      "categoryId": "cat-voice",
+      "name": "Perso",
+      "url": "https://perso.ai",
+      "icon": "https://www.google.com/s2/favicons?domain=perso.ai&sz=64",
+      "order": 1
+    },
+    {
+      "id": "svc-052",
+      "categoryId": "cat-voice",
+      "name": "Supertone",
+      "url": "https://supertone.ai",
+      "icon": "https://www.google.com/s2/favicons?domain=supertone.ai&sz=64",
+      "order": 2
+    },
+    {
+      "id": "svc-053",
+      "categoryId": "cat-voice",
+      "name": "Typecast",
+      "url": "https://typecast.ai",
+      "icon": "https://www.google.com/s2/favicons?domain=typecast.ai&sz=64",
+      "order": 3
+    },
+    {
+      "id": "svc-054",
+      "categoryId": "cat-voice",
+      "name": "HeyGen",
+      "url": "https://heygen.com",
+      "icon": "https://www.google.com/s2/favicons?domain=heygen.com&sz=64",
+      "order": 4
+    },
+    {
+      "id": "svc-055",
+      "categoryId": "cat-voice",
+      "name": "Hedra",
+      "url": "https://hedra.com",
+      "icon": "https://www.google.com/s2/favicons?domain=hedra.com&sz=64",
+      "order": 5
+    },
+    {
+      "id": "svc-060",
+      "categoryId": "cat-coding",
+      "name": "Google AI Studio",
+      "url": "https://aistudio.google.com",
+      "icon": "https://www.google.com/s2/favicons?domain=aistudio.google.com&sz=64",
+      "order": 0
+    },
+    {
+      "id": "svc-061",
+      "categoryId": "cat-coding",
+      "name": "Lovable",
+      "url": "https://lovable.dev",
+      "icon": "https://www.google.com/s2/favicons?domain=lovable.dev&sz=64",
+      "order": 6
+    },
+    {
+      "id": "svc-062",
+      "categoryId": "cat-coding",
+      "name": "Replit AI",
+      "url": "https://replit.com",
+      "icon": "https://www.google.com/s2/favicons?domain=replit.com&sz=64",
+      "order": 2
+    },
+    {
+      "id": "svc-063",
+      "categoryId": "cat-coding",
+      "name": "Cursor",
+      "url": "https://cursor.sh",
+      "icon": "https://www.google.com/s2/favicons?domain=cursor.sh&sz=64",
+      "order": 1
+    },
+    {
+      "id": "svc-064",
+      "categoryId": "cat-coding",
+      "name": "Claude",
+      "url": "https://claude.ai",
+      "icon": "https://www.google.com/s2/favicons?domain=claude.ai&sz=64",
+      "order": 4
+    },
+    {
+      "id": "svc-065",
+      "categoryId": "cat-coding",
+      "name": "Base44",
+      "url": "https://base44.com",
+      "icon": "https://www.google.com/s2/favicons?domain=base44.com&sz=64",
+      "order": 3
+    },
+    {
+      "id": "svc-066",
+      "categoryId": "cat-coding",
+      "name": "Bolt",
+      "url": "https://bolt.new",
+      "icon": "https://www.google.com/s2/favicons?domain=bolt.new&sz=64",
+      "order": 5
+    },
+    {
+      "id": "svc-070",
+      "categoryId": "cat-music",
+      "name": "Suno AI",
+      "url": "https://suno.ai",
+      "icon": "https://www.google.com/s2/favicons?domain=suno.ai&sz=64",
+      "order": 0
+    },
+    {
+      "id": "svc-071",
+      "categoryId": "cat-music",
+      "name": "Udio",
+      "url": "https://udio.com",
+      "icon": "https://www.google.com/s2/favicons?domain=udio.com&sz=64",
+      "order": 1
+    },
+    {
+      "id": "svc-072",
+      "categoryId": "cat-music",
+      "name": "AIVA",
+      "url": "https://aiva.ai",
+      "icon": "https://www.google.com/s2/favicons?domain=aiva.ai&sz=64",
+      "order": 2
+    },
+    {
+      "id": "svc-080",
+      "categoryId": "cat-edit",
+      "name": "vrew",
+      "url": "https://vrew.voyagerx.com",
+      "icon": "https://www.google.com/s2/favicons?domain=vrew.voyagerx.com&sz=64",
+      "order": 1
+    },
+    {
+      "id": "svc-081",
+      "categoryId": "cat-edit",
+      "name": "Cutback",
+      "url": "https://cutback.video",
+      "icon": "https://www.google.com/s2/favicons?domain=cutback.video&sz=64",
+      "order": 2
+    },
+    {
+      "id": "svc-082",
+      "categoryId": "cat-edit",
+      "name": "Capcut",
+      "url": "https://www.capcut.com",
+      "icon": "https://www.google.com/s2/favicons?domain=www.capcut.com&sz=64",
+      "order": 0
+    },
+    {
+      "id": "svc-090",
+      "categoryId": "cat-business",
+      "name": "Gamma",
+      "url": "https://gamma.app",
+      "icon": "https://www.google.com/s2/favicons?domain=gamma.app&sz=64",
+      "order": 1
+    },
+    {
+      "id": "svc-091",
+      "categoryId": "cat-business",
+      "name": "NotebookLM",
+      "url": "https://notebooklm.google.com",
+      "icon": "https://www.google.com/s2/favicons?domain=notebooklm.google.com&sz=64",
+      "order": 0
+    },
+    {
+      "id": "svc-1764471054182-tsq9wj2nt",
+      "categoryId": "cat-1764470995010-du8kfkzgp",
+      "name": "Gemini",
+      "url": "https://gemini.google.com",
+      "icon": "https://www.google.com/s2/favicons?domain=gemini.google.com&sz=64",
+      "order": 0
+    },
+    {
+      "id": "svc-1764597832924-9tdgs3eyk",
+      "categoryId": "cat-1764470995010-du8kfkzgp",
+      "name": "Nano Banana",
+      "url": "https://nanobanana.com",
+      "icon": "https://www.google.com/s2/favicons?domain=nanobanana.com&sz=64",
+      "order": 1
+    },
+    {
+      "id": "svc-1764597846513-raj1lokjc",
+      "categoryId": "cat-1764470995010-du8kfkzgp",
+      "name": "Google AI Studio",
+      "url": "https://aistudio.google.com",
+      "icon": "https://www.google.com/s2/favicons?domain=aistudio.google.com&sz=64",
+      "order": 2
+    },
+    {
+      "id": "svc-1764597860807-2um8iisgx",
+      "categoryId": "cat-1764470995010-du8kfkzgp",
+      "name": "NotebookLM",
+      "url": "https://notebooklm.google.com",
+      "icon": "https://www.google.com/s2/favicons?domain=notebooklm.google.com&sz=64",
+      "order": 3
+    },
+    {
+      "id": "svc-1764597871002-pveiqgkyk",
+      "categoryId": "cat-1764470995010-du8kfkzgp",
+      "name": "Whisk",
+      "url": "https://labs.google/whisk",
+      "icon": "https://www.google.com/s2/favicons?domain=labs.google&sz=64",
+      "order": 4
+    }
+  ],
+  "settings": {
+    "theme": "dark",
+    "viewMode": "grid",
+    "lastUpdated": "2025-12-01T14:29:01.068Z"
+  }
+}

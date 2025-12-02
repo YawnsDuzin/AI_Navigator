@@ -1,0 +1,119 @@
+/* ===== Responsive Design ===== */
+
+/* Tablet (max-width: 1024px) */
+@media (max-width: 1024px) {
+    :root {
+        --header-height: 64px;
+    }
+
+    .header {
+        padding: 0 1.5rem;
+    }
+
+    .main-content {
+        padding: 1.5rem;
+    }
+}
+
+/* Mobile (max-width: 768px) */
+@media (max-width: 768px) {
+    :root {
+        --header-height: auto;
+    }
+
+    .header {
+        flex-wrap: wrap;
+        padding: 1rem;
+        gap: 1rem;
+        height: auto;
+    }
+
+    .header-left {
+        order: 1;
+    }
+
+    .header-right {
+        order: 2;
+        margin-left: auto;
+    }
+
+    .header-center {
+        order: 3;
+        width: 100%;
+        margin: 0;
+        max-width: none;
+    }
+
+    .main-content {
+        padding: 1rem;
+    }
+
+    /* Always show category controls on mobile for better UX */
+    .category-header-right {
+        opacity: 1;
+    }
+
+    .category-content {
+        gap: 1rem;
+        justify-content: flex-start;
+        /* Align left */
+    }
+
+    /* Adjust modal for mobile */
+    .modal {
+        padding: 1rem;
+        align-items: flex-end;
+        /* Bottom sheet style or just center? Center is safer */
+        align-items: center;
+    }
+
+    .modal-content {
+        width: 100%;
+        max-width: none;
+        margin: 0;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    /* Adjust toasts */
+    .toast-container {
+        left: 1rem;
+        right: 1rem;
+        bottom: 1rem;
+        width: auto;
+    }
+
+    .toast {
+        min-width: 0;
+        width: 100%;
+    }
+}
+
+/* Small Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+    .category-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .category-header-right {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .service-card {
+        width: calc(33.33% - 0.67rem);
+        /* 3 items per row */
+        min-width: 70px;
+    }
+
+    .add-service-card {
+        width: calc(33.33% - 0.67rem);
+        min-width: 70px;
+    }
+
+    [data-view="list"] .service-card {
+        width: 100%;
+    }
+}
