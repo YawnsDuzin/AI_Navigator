@@ -1,56 +1,188 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Service Hub - AI 서비스 관리</title>
+    <title>AI Navigator - AI 서비스 관리</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/responsive.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: ['class', '[data-theme="dark"]'],
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            DEFAULT: '#6366f1', // Indigo 500
+                            hover: '#4f46e5',   // Indigo 600
+                            light: '#e0e7ff',   // Indigo 100
+                        },
+                        dark: {
+                            bg: '#0f172a',      // Slate 900
+                            surface: '#1e293b', // Slate 800
+                        }
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.15)',
+                        'glow': '0 0 15px rgba(99, 102, 241, 0.3)',
+                    },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                        'fade-in': 'fadeIn 0.5s ease-out forwards',
+                        'slide-up': 'slideUp 0.3s ease-out forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-3px)' },
+                        },
+                        fadeIn: {
+                            'from': { opacity: '0', transform: 'translateY(10px)' },
+                            'to': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        slideUp: {
+                            'from': { opacity: '0', transform: 'translateY(20px)' },
+                            'to': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+
+        .dark ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+
+        /* Glassmorphism Utilities */
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .dark .glass {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Drag & Drop Styles */
+        .dragging {
+            opacity: 0.5;
+            transform: scale(0.95);
+        }
+
+        .drag-over {
+            background-color: rgba(99, 102, 241, 0.1);
+            border-radius: 0.75rem;
+        }
+
+        .drag-placeholder {
+            width: 80px;
+            height: 80px;
+            border-radius: 0.75rem;
+            background-color: rgba(99, 102, 241, 0.1);
+            border: 2px dashed #6366f1;
+            margin: 0;
+            opacity: 0.7;
+            flex-shrink: 0;
+        }
+
+        /* Modal Transitions */
+        .modal {
+            display: none;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+    </style>
 </head>
 
-<body>
-    <div class="app-container">
+<body
+    class="bg-gray-100 text-slate-800 dark:bg-dark-bg dark:text-slate-100 transition-colors duration-300 min-h-screen flex flex-col font-sans">
+
+    <div class="app-container flex flex-col min-h-screen">
         <!-- Header -->
-        <header class="header">
-            <div class="header-left">
-                <h1 class="logo">
-                    <span class="logo-icon">🤖</span>
-                    AI Service Hub
+        <header
+            class="sticky top-0 z-50 flex flex-wrap items-center justify-between px-4 py-3 md:px-8 md:py-4 glass shadow-sm transition-all duration-300">
+            <div class="flex items-center gap-3">
+                <h1
+                    class="flex items-center gap-3 text-2xl font-bold font-heading bg-gradient-to-br from-primary to-indigo-600 bg-clip-text text-transparent">
+                    <img src="images/logo.png" alt="AI Navigator Logo" class="w-8 h-8 object-contain drop-shadow-md">
+                    AI Navigator
                 </h1>
             </div>
-            <div class="header-center">
-                <div class="search-box">
-                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+            <div class="flex-1 max-w-xl mx-4 order-3 md:order-2 w-full md:w-auto mt-3 md:mt-0">
+                <div class="relative group">
+                    <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-primary transition-colors"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="11" cy="11" r="8"></circle>
                         <path d="m21 21-4.35-4.35"></path>
                     </svg>
-                    <input type="text" id="searchInput" placeholder="서비스 검색..." autocomplete="off">
-                    <button class="search-clear" id="searchClear" style="display: none;">×</button>
+                    <input type="text" id="searchInput" placeholder="서비스 검색..." autocomplete="off"
+                        class="w-full py-2.5 pl-12 pr-10 bg-white/50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-full focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all shadow-inner text-sm">
+                    <button
+                        class="search-clear absolute right-3 top-1/2 -translate-y-1/2 w-7 h-7 flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                        id="searchClear" style="display: none;">×</button>
                 </div>
             </div>
-            <div class="header-right">
-                <button class="header-btn" id="viewToggle" title="뷰 모드 전환">
-                    <svg class="icon-grid" viewBox="0 0 24 24" fill="currentColor">
+
+            <div class="flex items-center gap-2 order-2 md:order-3 ml-auto md:ml-0">
+                <button
+                    class="p-2.5 rounded-xl text-slate-500 hover:bg-slate-100 hover:text-primary dark:text-slate-400 dark:hover:bg-slate-800 transition-colors"
+                    id="viewToggle" title="뷰 모드 전환">
+                    <svg class="icon-grid w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                         <rect x="3" y="3" width="7" height="7" rx="1"></rect>
                         <rect x="14" y="3" width="7" height="7" rx="1"></rect>
                         <rect x="3" y="14" width="7" height="7" rx="1"></rect>
                         <rect x="14" y="14" width="7" height="7" rx="1"></rect>
                     </svg>
-                    <svg class="icon-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        style="display: none;">
-                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <svg class="icon-list w-5 h-5 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <line x1="3" y="6" x2="21" y2="6"></line>
                         <line x1="3" y1="12" x2="21" y2="12"></line>
                         <line x1="3" y1="18" x2="21" y2="18"></line>
                     </svg>
                 </button>
-                <button class="header-btn" id="themeToggle" title="테마 전환">
-                    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <button
+                    class="p-2.5 rounded-xl text-slate-500 hover:bg-slate-100 hover:text-primary dark:text-slate-400 dark:hover:bg-slate-800 transition-colors"
+                    id="themeToggle" title="테마 전환">
+                    <svg class="icon-sun w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
                         <circle cx="12" cy="12" r="5"></circle>
                         <line x1="12" y1="1" x2="12" y2="3"></line>
                         <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -61,42 +193,49 @@
                         <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
                         <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
                     </svg>
-                    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        style="display: none;">
+                    <svg class="icon-moon w-5 h-5 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
                         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                     </svg>
                 </button>
-                <button class="header-btn" id="settingsBtn" title="설정">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
+                <button
+                    class="p-2.5 rounded-xl text-slate-500 hover:bg-slate-100 hover:text-primary dark:text-slate-400 dark:hover:bg-slate-800 transition-colors"
+                    id="settingsBtn" title="설정">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
                         <path
                             d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.47a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z">
                         </path>
                         <circle cx="12" cy="12" r="3"></circle>
                     </svg>
                 </button>
-                <button class="header-btn primary" id="addCategoryBtn" title="카테고리 추가">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <button
+                    class="hidden md:inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-primary to-indigo-600 text-white font-semibold rounded-xl shadow-lg shadow-indigo-500/30 hover:-translate-y-0.5 hover:shadow-indigo-500/40 transition-all duration-300"
+                    id="addCategoryBtn" title="카테고리 추가">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="12" y1="5" x2="12" y2="19"></line>
                         <line x1="5" y1="12" x2="19" y2="12"></line>
                     </svg>
-                    <span class="btn-text">카테고리 추가</span>
+                    <span>카테고리 추가</span>
                 </button>
             </div>
         </header>
 
         <!-- Main Content -->
-        <main class="main-content" id="mainContent">
+        <main class="flex-1 w-full max-w-[1400px] mx-auto p-4 md:p-8" id="mainContent">
             <!-- Categories will be rendered here -->
         </main>
 
         <!-- Empty State -->
-        <div class="empty-state" id="emptyState" style="display: none;">
-            <div class="empty-icon">📭</div>
-            <h2>등록된 서비스가 없습니다</h2>
-            <p>카테고리를 추가하고 AI 서비스를 등록해보세요!</p>
-            <button class="btn btn-primary" id="emptyAddBtn">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <div class="flex flex-col items-center justify-center py-24 text-center animate-fade-in" id="emptyState"
+            style="display: none;">
+            <div class="text-8xl mb-8 animate-float">📭</div>
+            <h2 class="text-3xl font-bold text-slate-800 dark:text-slate-100 mb-4">등록된 서비스가 없습니다</h2>
+            <p class="text-slate-500 dark:text-slate-400 mb-8 text-lg">카테고리를 추가하고 AI 서비스를 등록해보세요!</p>
+            <button
+                class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-semibold rounded-xl shadow-lg hover:-translate-y-1 transition-all"
+                id="emptyAddBtn">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="12" y1="5" x2="12" y2="19"></line>
                     <line x1="5" y1="12" x2="19" y2="12"></line>
                 </svg>
@@ -105,132 +244,200 @@
         </div>
 
         <!-- Search Empty State -->
-        <div class="search-empty" id="searchEmpty" style="display: none;">
-            <div class="empty-icon">🔍</div>
-            <h2>검색 결과가 없습니다</h2>
-            <p>다른 검색어로 시도해보세요</p>
+        <div class="flex flex-col items-center justify-center py-24 text-center animate-fade-in" id="searchEmpty"
+            style="display: none;">
+            <div class="text-8xl mb-8 animate-float">🔍</div>
+            <h2 class="text-3xl font-bold text-slate-800 dark:text-slate-100 mb-4">검색 결과가 없습니다</h2>
+            <p class="text-slate-500 dark:text-slate-400 text-lg">다른 검색어로 시도해보세요</p>
         </div>
     </div>
 
     <!-- Category Modal -->
-    <div class="modal" id="categoryModal">
-        <div class="modal-backdrop"></div>
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="categoryModalTitle">카테고리 추가</h2>
-                <button class="modal-close" data-close>&times;</button>
+    <div class="modal fixed inset-0 z-[100] items-center justify-center p-4" id="categoryModal">
+        <div class="modal-backdrop absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"></div>
+        <div
+            class="modal-content relative w-full max-w-sm bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border border-white/50 dark:border-slate-700 rounded-2xl shadow-2xl overflow-hidden transform transition-all animate-slide-up">
+            <div
+                class="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50">
+                <h2 class="text-lg font-bold text-slate-800 dark:text-slate-100" id="categoryModalTitle">카테고리 추가</h2>
+                <button
+                    class="modal-close p-1 rounded-full text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                    data-close>
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
             </div>
-            <form id="categoryForm">
-                <div class="form-group">
-                    <label for="categoryName">카테고리 이름 *</label>
-                    <input type="text" id="categoryName" required placeholder="예: AI Agent">
+            <form id="categoryForm" class="p-6">
+                <div class="mb-5">
+                    <label for="categoryName"
+                        class="block mb-2 text-sm font-semibold text-slate-700 dark:text-slate-300">카테고리 이름 *</label>
+                    <input type="text" id="categoryName" required placeholder="예: AI Agent"
+                        class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
                 </div>
-                <div class="form-group">
-                    <label for="categoryIcon">아이콘 (이모지)</label>
-                    <div class="icon-input-group">
-                        <input type="text" id="categoryIcon" placeholder="🤖" maxlength="4">
-                        <div class="emoji-suggestions">
-                            <button type="button" data-emoji="🤖">🤖</button>
-                            <button type="button" data-emoji="🖼️">🖼️</button>
-                            <button type="button" data-emoji="🎬">🎬</button>
-                            <button type="button" data-emoji="🎤">🎤</button>
-                            <button type="button" data-emoji="💻">💻</button>
-                            <button type="button" data-emoji="🎵">🎵</button>
-                            <button type="button" data-emoji="🎨">🎨</button>
-                            <button type="button" data-emoji="📝">📝</button>
-                            <button type="button" data-emoji="⚡">⚡</button>
-                            <button type="button" data-emoji="🔧">🔧</button>
-                            <button type="button" data-emoji="📊">📊</button>
-                            <button type="button" data-emoji="🎯">🎯</button>
+                <div class="mb-5">
+                    <label for="categoryIcon"
+                        class="block mb-2 text-sm font-semibold text-slate-700 dark:text-slate-300">아이콘 (이모지)</label>
+                    <div class="flex flex-col gap-3">
+                        <input type="text" id="categoryIcon" placeholder="🤖" maxlength="4"
+                            class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
+                        <div class="emoji-suggestions flex flex-wrap gap-2">
+                            <button type="button" data-emoji="🤖"
+                                class="w-10 h-10 flex items-center justify-center text-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-primary hover:bg-primary/10 transition-all">🤖</button>
+                            <button type="button" data-emoji="🖼️"
+                                class="w-10 h-10 flex items-center justify-center text-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-primary hover:bg-primary/10 transition-all">🖼️</button>
+                            <button type="button" data-emoji="🎬"
+                                class="w-10 h-10 flex items-center justify-center text-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-primary hover:bg-primary/10 transition-all">🎬</button>
+                            <button type="button" data-emoji="🎤"
+                                class="w-10 h-10 flex items-center justify-center text-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-primary hover:bg-primary/10 transition-all">🎤</button>
+                            <button type="button" data-emoji="💻"
+                                class="w-10 h-10 flex items-center justify-center text-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-primary hover:bg-primary/10 transition-all">💻</button>
+                            <button type="button" data-emoji="🎵"
+                                class="w-10 h-10 flex items-center justify-center text-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-primary hover:bg-primary/10 transition-all">🎵</button>
+                            <button type="button" data-emoji="🎨"
+                                class="w-10 h-10 flex items-center justify-center text-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-primary hover:bg-primary/10 transition-all">🎨</button>
+                            <button type="button" data-emoji="📝"
+                                class="w-10 h-10 flex items-center justify-center text-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-primary hover:bg-primary/10 transition-all">📝</button>
                         </div>
                     </div>
                 </div>
                 <input type="hidden" id="categoryId">
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-close>취소</button>
-                    <button type="submit" class="btn btn-primary">저장</button>
+                <div class="flex justify-end gap-3 pt-4 border-t border-slate-200 dark:border-slate-700">
+                    <button type="button"
+                        class="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                        data-close>취소</button>
+                    <button type="submit"
+                        class="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-hover shadow-lg shadow-primary/30 transition-all">저장</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Service Modal -->
-    <div class="modal" id="serviceModal">
-        <div class="modal-backdrop"></div>
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="serviceModalTitle">서비스 추가</h2>
-                <button class="modal-close" data-close>&times;</button>
+    <div class="modal fixed inset-0 z-[100] items-center justify-center p-4" id="serviceModal">
+        <div class="modal-backdrop absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"></div>
+        <div
+            class="modal-content relative w-full max-w-sm bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border border-white/50 dark:border-slate-700 rounded-2xl shadow-2xl overflow-hidden transform transition-all animate-slide-up">
+            <div
+                class="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50">
+                <h2 class="text-lg font-bold text-slate-800 dark:text-slate-100" id="serviceModalTitle">서비스 추가</h2>
+                <button
+                    class="modal-close p-1 rounded-full text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                    data-close>
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
             </div>
-            <form id="serviceForm">
-                <div class="form-group">
-                    <label for="serviceName">서비스 이름 *</label>
-                    <input type="text" id="serviceName" required placeholder="예: ChatGPT">
+            <form id="serviceForm" class="p-6">
+                <div class="mb-5">
+                    <label for="serviceName"
+                        class="block mb-2 text-sm font-semibold text-slate-700 dark:text-slate-300">서비스 이름 *</label>
+                    <input type="text" id="serviceName" required placeholder="예: ChatGPT"
+                        class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
                 </div>
-                <div class="form-group">
-                    <label for="serviceUrl">URL *</label>
-                    <input type="url" id="serviceUrl" required placeholder="https://chat.openai.com">
+                <div class="mb-5">
+                    <label for="serviceUrl"
+                        class="block mb-2 text-sm font-semibold text-slate-700 dark:text-slate-300">URL *</label>
+                    <input type="url" id="serviceUrl" required placeholder="https://chat.openai.com"
+                        class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
                 </div>
-                <div class="form-group">
-                    <label for="serviceIcon">아이콘 URL (선택)</label>
-                    <input type="text" id="serviceIcon" placeholder="자동으로 파비콘을 가져옵니다">
-                    <small class="form-hint">비워두면 자동으로 사이트 아이콘을 가져옵니다</small>
+                <div class="mb-5">
+                    <label for="serviceIcon"
+                        class="block mb-2 text-sm font-semibold text-slate-700 dark:text-slate-300">아이콘 URL (선택)</label>
+                    <input type="text" id="serviceIcon" placeholder="자동으로 파비콘을 가져옵니다"
+                        class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
+                    <small class="block mt-1.5 text-xs text-slate-500">비워두면 자동으로 사이트 아이콘을 가져옵니다</small>
                 </div>
-                <div class="form-group">
-                    <label for="serviceCategory">카테고리 *</label>
-                    <select id="serviceCategory" required>
+                <div class="mb-5">
+                    <label for="serviceCategory"
+                        class="block mb-2 text-sm font-semibold text-slate-700 dark:text-slate-300">카테고리 *</label>
+                    <select id="serviceCategory" required
+                        class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
                         <!-- Options will be populated dynamically -->
                     </select>
                 </div>
                 <input type="hidden" id="serviceId">
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-close>취소</button>
-                    <button type="submit" class="btn btn-primary">저장</button>
+                <div class="flex justify-end gap-3 pt-4 border-t border-slate-200 dark:border-slate-700">
+                    <button type="button"
+                        class="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                        data-close>취소</button>
+                    <button type="submit"
+                        class="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-hover shadow-lg shadow-primary/30 transition-all">저장</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Delete Confirmation Modal -->
-    <div class="modal" id="deleteModal">
-        <div class="modal-backdrop"></div>
-        <div class="modal-content modal-small">
-            <div class="modal-header">
-                <h2>삭제 확인</h2>
-                <button class="modal-close" data-close>&times;</button>
+    <div class="modal fixed inset-0 z-[100] items-center justify-center p-4" id="deleteModal">
+        <div class="modal-backdrop absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"></div>
+        <div
+            class="modal-content relative w-full max-w-[360px] bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border border-white/50 dark:border-slate-700 rounded-2xl shadow-2xl overflow-hidden transform transition-all animate-slide-up">
+            <div
+                class="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50">
+                <h2 class="text-lg font-bold text-slate-800 dark:text-slate-100">삭제 확인</h2>
+                <button
+                    class="modal-close p-1 rounded-full text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                    data-close>
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
             </div>
-            <div class="modal-body">
-                <p id="deleteMessage">정말 삭제하시겠습니까?</p>
+            <div class="p-6">
+                <p id="deleteMessage" class="text-slate-600 dark:text-slate-300">정말 삭제하시겠습니까?</p>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-close>취소</button>
-                <button type="button" class="btn btn-danger" id="confirmDelete">삭제</button>
+            <div
+                class="flex justify-end gap-3 px-6 py-4 border-t border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50">
+                <button type="button"
+                    class="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                    data-close>취소</button>
+                <button type="button"
+                    class="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-lg hover:bg-red-600 shadow-lg shadow-red-500/30 transition-all"
+                    id="confirmDelete">삭제</button>
             </div>
         </div>
     </div>
 
     <!-- Settings Modal -->
-    <div class="modal" id="settingsModal">
-        <div class="modal-backdrop"></div>
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>설정</h2>
-                <button class="modal-close" data-close>&times;</button>
+    <div class="modal fixed inset-0 z-[100] items-center justify-center p-4" id="settingsModal">
+        <div class="modal-backdrop absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"></div>
+        <div
+            class="modal-content relative w-full max-w-sm bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border border-white/50 dark:border-slate-700 rounded-2xl shadow-2xl overflow-hidden transform transition-all animate-slide-up">
+            <div
+                class="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50">
+                <h2 class="text-lg font-bold text-slate-800 dark:text-slate-100">설정</h2>
+                <button
+                    class="modal-close p-1 rounded-full text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                    data-close>
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
             </div>
-            <div class="modal-body">
-                <div class="settings-section">
-                    <h3>데이터 관리</h3>
-                    <div class="settings-actions">
-                        <button class="btn btn-secondary" id="exportData">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <div class="p-6 space-y-6">
+                <div class="pb-6 border-b border-slate-200 dark:border-slate-700">
+                    <h3 class="text-sm font-bold text-slate-800 dark:text-slate-100 mb-4">데이터 관리</h3>
+                    <div class="flex flex-wrap gap-3">
+                        <button
+                            class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors"
+                            id="exportData">
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                                 <polyline points="7,10 12,15 17,10"></polyline>
                                 <line x1="12" y1="15" x2="12" y2="3"></line>
                             </svg>
                             데이터 내보내기
                         </button>
-                        <button class="btn btn-secondary" id="importData">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <button
+                            class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors"
+                            id="importData">
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                                 <polyline points="17,8 12,3 7,8"></polyline>
                                 <line x1="12" y1="3" x2="12" y2="15"></line>
@@ -240,10 +447,12 @@
                         <input type="file" id="importFile" accept=".json" style="display: none;">
                     </div>
                 </div>
-                <div class="settings-section">
-                    <h3>초기화</h3>
-                    <button class="btn btn-danger" id="resetData">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <div>
+                    <h3 class="text-sm font-bold text-slate-800 dark:text-slate-100 mb-4">초기화</h3>
+                    <button
+                        class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-lg hover:bg-red-600 shadow-lg shadow-red-500/30 transition-all"
+                        id="resetData">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <polyline points="1,4 1,10 7,10"></polyline>
                             <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
                         </svg>
@@ -251,14 +460,17 @@
                     </button>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-close>닫기</button>
+            <div
+                class="flex justify-end p-4 border-t border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50">
+                <button type="button"
+                    class="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-hover shadow-lg shadow-primary/30 transition-all"
+                    data-close>닫기</button>
             </div>
         </div>
     </div>
 
     <!-- Toast Notification -->
-    <div class="toast-container" id="toastContainer"></div>
+    <div class="fixed bottom-8 right-8 z-[2000] flex flex-col gap-4" id="toastContainer"></div>
 
     <!-- Scripts -->
     <script src="js/data.js"></script>

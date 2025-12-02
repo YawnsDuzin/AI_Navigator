@@ -222,62 +222,12 @@ function handleDrop(e) {
  */
 function createPlaceholder() {
     placeholder = document.createElement('div');
-    placeholder.className = 'service-card drag-placeholder';
+    placeholder.className = 'drag-placeholder';
     // CSS class handles styling now
     placeholder.style.cssText = '';
 }
 
-/**
- * 플레이스홀더 제거
- */
-function removePlaceholder() {
-    if (placeholder && placeholder.parentNode) {
-        placeholder.parentNode.removeChild(placeholder);
-    }
-    placeholder = null;
-}
-
-/**
- * 드래그 후 요소 찾기 (삽입 위치 결정)
- * 그리드 레이아웃 지원을 위해 X, Y 좌표 모두 사용
- */
-function getDragAfterElement(container, x, y) {
-    const draggableElements = [...container.querySelectorAll('.service-card:not(.dragging):not(.drag-placeholder):not(.add-service-card)')];
-
-    if (draggableElements.length === 0) return null;
-
-    // 가장 가까운 요소 찾기
-    const closest = draggableElements.reduce((closest, child) => {
-        const box = child.getBoundingClientRect();
-        const boxCenterX = box.left + box.width / 2;
-        const boxCenterY = box.top + box.height / 2;
-        const dist = Math.hypot(x - boxCenterX, y - boxCenterY);
-
-        if (dist < closest.dist) {
-            return { dist: dist, element: child, centerX: boxCenterX };
-        } else {
-            return closest;
-        }
-    }, { dist: Number.POSITIVE_INFINITY });
-
-    if (!closest.element) return null;
-
-    // 커서가 요소의 중심보다 오른쪽에 있으면 그 다음 요소 앞에 삽입 (즉, 해당 요소 뒤에 삽입)
-    if (x > closest.centerX) {
-        return closest.element.nextElementSibling;
-    } else {
-        return closest.element;
-    }
-}
-
-// ===== 카테고리 드래그앤드롭 =====
-
-let draggedCategory = null;
-let categoryPlaceholder = null;
-let isDraggingCategory = false;
-let dragStartX = 0;
-let dragStartY = 0;
-const DRAG_THRESHOLD = 5; // 드래그로 인식하기 위한 최소 이동 거리
+// ... (existing code)
 
 /**
  * 카테고리 드래그 시작
@@ -326,16 +276,9 @@ function handleCategoryDragStart(e) {
 
     // 카테고리 플레이스홀더 생성
     categoryPlaceholder = document.createElement('div');
-    categoryPlaceholder.className = 'category-placeholder';
+    categoryPlaceholder.className = 'category-placeholder w-full rounded-2xl border-2 border-dashed border-primary/50 bg-primary/5 mb-12 transition-all duration-200';
     categoryPlaceholder.dataset.placeholder = 'true';
-    categoryPlaceholder.style.cssText = `
-        height: ${draggedCategory.offsetHeight}px;
-        border: 2px dashed var(--color-primary);
-        background-color: rgba(99, 102, 241, 0.05);
-        border-radius: var(--radius-xl);
-        margin-bottom: 3rem;
-        transition: height 0.2s ease;
-    `;
+    categoryPlaceholder.style.height = `${draggedCategory.offsetHeight}px`;
 }
 
 /**

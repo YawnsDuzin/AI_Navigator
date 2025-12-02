@@ -282,46 +282,52 @@ class App {
     /**
      * 카테고리 렌더링
      */
+    /**
+     * 카테고리 렌더링
+     */
     renderCategory(category, services) {
         const serviceCount = dataManager.getServiceCountByCategory(category.id);
         const collapsedClass = category.collapsed ? 'collapsed' : '';
+        const gridRowsClass = category.collapsed ? 'grid-rows-[0fr]' : 'grid-rows-[1fr]';
+        const opacityClass = category.collapsed ? 'opacity-0 invisible' : 'opacity-100 visible';
+        const overflowClass = category.collapsed ? 'overflow-hidden' : ''; // 접혀있을 때만 overflow-hidden 적용
 
         return `
-            <section class="category-section ${collapsedClass}" data-category-id="${category.id}">
-                <div class="category-header">
-                    <div class="category-header-left">
-                        <span class="category-icon">${category.icon}</span>
-                        <span class="category-name">${this.escapeHtml(category.name)}</span>
-                        <span class="category-count">(${serviceCount})</span>
+            <section class="category-section mb-12 animate-fade-in group/section ${collapsedClass}" data-category-id="${category.id}">
+                <div class="category-header flex items-center justify-between px-4 py-3 mb-2 cursor-pointer select-none transition-all rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                    <div class="category-header-left flex items-center gap-3">
+                        <span class="category-icon text-xl hidden">${category.icon}</span>
+                        <span class="category-name text-lg font-bold text-slate-800 dark:text-slate-100 tracking-tight">${this.escapeHtml(category.name)}</span>
+                        <span class="category-count text-sm text-slate-400 hidden">(${serviceCount})</span>
                     </div>
-                    <div class="category-header-right">
-                        <button class="category-btn" data-action="add-service" title="서비스 추가">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <div class="category-header-right flex items-center gap-1 opacity-0 group-hover/section:opacity-100 transition-opacity duration-300">
+                        <button class="category-btn p-2 rounded-full text-slate-400 hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" data-action="add-service" title="서비스 추가">
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <line x1="12" y1="5" x2="12" y2="19"></line>
                                 <line x1="5" y1="12" x2="19" y2="12"></line>
                             </svg>
                         </button>
-                        <button class="category-btn" data-action="edit" title="카테고리 수정">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <button class="category-btn p-2 rounded-full text-slate-400 hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" data-action="edit" title="카테고리 수정">
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                                 <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                             </svg>
                         </button>
-                        <button class="category-btn" data-action="delete" title="카테고리 삭제">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <button class="category-btn p-2 rounded-full text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors" data-action="delete" title="카테고리 삭제">
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="3,6 5,6 21,6"></polyline>
                                 <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                             </svg>
                         </button>
-                        <button class="category-btn collapse-icon" title="접기/펼치기">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <button class="category-btn collapse-icon p-2 rounded-full text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-transform duration-300 ${category.collapsed ? '-rotate-90' : ''}" title="접기/펼치기">
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="6,9 12,15 18,9"></polyline>
                             </svg>
                         </button>
                     </div>
                 </div>
-                <div class="category-content-wrapper">
-                    <div class="category-content" data-category-id="${category.id}">
+                <div class="category-content-wrapper grid ${gridRowsClass} transition-[grid-template-rows] duration-300 ease-out ${overflowClass}">
+                    <div class="category-content flex flex-wrap gap-4 min-h-0 transition-all duration-300 p-1 ${opacityClass}" data-category-id="${category.id}">
                         ${services.map(service => this.renderServiceCard(service)).join('')}
                         ${!this.currentSearch ? this.renderAddServiceCard(category.id) : ''}
                     </div>
@@ -334,33 +340,53 @@ class App {
      * 서비스 카드 렌더링
      */
     renderServiceCard(service) {
+        const viewMode = dataManager.getSettings().viewMode;
+        const isList = viewMode === 'list';
+
+        const cardClasses = isList
+            ? 'service-card group relative flex flex-row items-center w-full p-3 bg-white/70 dark:bg-slate-800/70 backdrop-blur-md border border-white/50 dark:border-slate-700 rounded-xl cursor-pointer transition-all duration-300 shadow-sm hover:shadow-md hover:bg-white/90 dark:hover:bg-slate-800/90 hover:z-10'
+            : 'service-card group relative flex flex-col items-center w-20 p-4 bg-white/70 dark:bg-slate-800/70 backdrop-blur-md border border-white/50 dark:border-slate-700 rounded-2xl cursor-pointer transition-all duration-300 shadow-sm hover:-translate-y-1 hover:shadow-xl hover:bg-white/90 dark:hover:bg-slate-800/90 hover:z-10';
+
+        const iconSizeClasses = isList ? 'w-10 h-10 mr-3' : 'w-14 h-14 mb-3';
+        const iconCommonClasses = `service-icon ${iconSizeClasses} rounded-full object-contain p-1 bg-white shadow-md border-2 border-white/50 transition-transform duration-500 group-hover:scale-110 group-hover:border-primary/30 group-hover:shadow-lg`;
+        const emojiCommonClasses = `service-icon-emoji ${iconSizeClasses} rounded-full bg-white shadow-md border-2 border-white/50 items-center justify-center text-xl group-hover:scale-110 group-hover:border-primary/30 transition-transform duration-500`;
+
         const iconHtml = service.icon
-            ? `<img src="${this.escapeHtml(service.icon)}" alt="${this.escapeHtml(service.name)}" class="service-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
-               <span class="service-icon-emoji" style="display:none;">🔗</span>`
-            : `<span class="service-icon-emoji">🔗</span>`;
+            ? `<img src="${this.escapeHtml(service.icon)}" alt="${this.escapeHtml(service.name)}" class="${iconCommonClasses}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+               <span class="${emojiCommonClasses} hidden">🔗</span>`
+            : `<span class="${emojiCommonClasses} flex">🔗</span>`;
+
+        const nameClasses = isList
+            ? 'service-name text-sm font-medium text-slate-600 dark:text-slate-300 text-left flex-1 truncate group-hover:text-slate-900 dark:group-hover:text-slate-100 transition-colors'
+            : 'service-name text-xs font-medium text-slate-500 dark:text-slate-400 text-center w-full truncate group-hover:text-slate-800 dark:group-hover:text-slate-200 transition-colors';
+
+        const menuClasses = isList
+            ? 'service-menu relative ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200'
+            : 'service-menu absolute top-2 right-2 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-200';
 
         return `
-            <div class="service-card" data-service-id="${service.id}" data-url="${this.escapeHtml(service.url)}" draggable="true">
+            <div class="${cardClasses}" data-service-id="${service.id}" data-url="${this.escapeHtml(service.url)}" draggable="true">
                 ${iconHtml}
-                <span class="service-name">${this.escapeHtml(service.name)}</span>
-                <div class="service-menu">
-                    <button class="service-menu-btn" title="메뉴">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
+                <span class="${nameClasses}">${this.escapeHtml(service.name)}</span>
+                
+                <div class="${menuClasses}">
+                    <button class="service-menu-btn flex items-center justify-center w-6 h-6 rounded-full bg-white/50 dark:bg-black/20 backdrop-blur-sm hover:bg-white dark:hover:bg-slate-700 text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors shadow-sm" title="메뉴">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
                             <circle cx="12" cy="5" r="2"></circle>
                             <circle cx="12" cy="12" r="2"></circle>
                             <circle cx="12" cy="19" r="2"></circle>
                         </svg>
                     </button>
-                    <div class="service-menu-dropdown">
-                        <button class="service-menu-item edit" data-action="edit">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <div class="service-menu-dropdown hidden absolute top-full right-0 mt-1 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border border-white/50 dark:border-slate-700 rounded-xl shadow-xl min-w-[120px] overflow-hidden z-30 animate-fade-in">
+                        <button class="service-menu-item edit w-full flex items-center gap-2 px-3 py-2 text-xs text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-left" data-action="edit">
+                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                                 <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                             </svg>
                             <span>수정</span>
                         </button>
-                        <button class="service-menu-item delete" data-action="delete">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <button class="service-menu-item delete w-full flex items-center gap-2 px-3 py-2 text-xs text-slate-600 dark:text-slate-300 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-500 transition-colors text-left" data-action="delete">
+                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="3,6 5,6 21,6"></polyline>
                                 <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                             </svg>
@@ -376,13 +402,26 @@ class App {
      * 서비스 추가 카드 렌더링
      */
     renderAddServiceCard(categoryId) {
+        const viewMode = dataManager.getSettings().viewMode;
+        const isList = viewMode === 'list';
+
+        const cardClasses = isList
+            ? 'add-service-card group flex flex-row items-center justify-center w-full p-3 h-auto bg-white/10 backdrop-blur-sm border border-dashed border-slate-300 dark:border-slate-600 rounded-xl cursor-pointer transition-all duration-300 hover:border-primary hover:bg-white/25 hover:shadow-md'
+            : 'add-service-card group flex flex-col items-center justify-center w-20 h-[124px] bg-white/10 backdrop-blur-sm border border-dashed border-slate-300 dark:border-slate-600 rounded-2xl cursor-pointer transition-all duration-300 hover:border-primary hover:bg-white/25 hover:-translate-y-1 hover:shadow-md';
+
+        const iconClasses = isList
+            ? 'w-10 h-10 mr-3 rounded-full border border-dashed border-slate-300 dark:border-slate-600 flex items-center justify-center text-slate-400 group-hover:border-primary group-hover:bg-primary/10 group-hover:text-primary transition-colors'
+            : 'w-14 h-14 mb-3 rounded-full border border-dashed border-slate-300 dark:border-slate-600 flex items-center justify-center text-slate-400 group-hover:border-primary group-hover:bg-primary/10 group-hover:text-primary transition-colors';
+
         return `
-            <div class="add-service-card" data-category-id="${categoryId}">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
-                <span>추가</span>
+            <div class="${cardClasses}" data-category-id="${categoryId}">
+                <div class="${iconClasses}">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                </div>
+                <span class="text-xs font-medium text-slate-400 group-hover:text-primary transition-colors">추가</span>
             </div>
         `;
     }
@@ -399,11 +438,49 @@ class App {
     /**
      * 카테고리 접기/펼치기
      */
+    /**
+     * 카테고리 접기/펼치기
+     */
     toggleCategoryCollapse(categoryId) {
         const collapsed = dataManager.toggleCategoryCollapse(categoryId);
-        const section = document.querySelector(`[data-category-id="${categoryId}"]`);
-        if (section) {
-            section.classList.toggle('collapsed', collapsed);
+
+        const section = document.querySelector(`.category-section[data-category-id="${categoryId}"]`);
+        if (!section) return;
+
+        const wrapper = section.querySelector('.category-content-wrapper');
+        const content = section.querySelector('.category-content');
+        const icon = section.querySelector('.collapse-icon');
+
+        if (collapsed) {
+            // 접을 때: overflow-hidden 추가 -> 애니메이션 시작
+            wrapper.classList.add('overflow-hidden');
+
+            wrapper.classList.remove('grid-rows-[1fr]');
+            wrapper.classList.add('grid-rows-[0fr]');
+
+            content.classList.remove('opacity-100', 'visible');
+            content.classList.add('opacity-0', 'invisible');
+
+            if (icon) icon.classList.add('-rotate-90');
+            section.classList.add('collapsed');
+        } else {
+            // 펼칠 때: 애니메이션 시작 -> 끝난 후 overflow-hidden 제거
+            wrapper.classList.remove('grid-rows-[0fr]');
+            wrapper.classList.add('grid-rows-[1fr]');
+
+            content.classList.remove('opacity-0', 'invisible');
+            content.classList.add('opacity-100', 'visible');
+
+            if (icon) icon.classList.remove('-rotate-90');
+            section.classList.remove('collapsed');
+
+            // 애니메이션 시간(300ms) 후 overflow-hidden 제거
+            setTimeout(() => {
+                // 여전히 펼쳐진 상태인지 확인
+                if (!wrapper.classList.contains('grid-rows-[0fr]')) {
+                    wrapper.classList.remove('overflow-hidden');
+                }
+            }, 300);
         }
     }
 
@@ -415,6 +492,7 @@ class App {
         const newMode = settings.viewMode === 'grid' ? 'list' : 'grid';
         dataManager.updateSettings({ viewMode: newMode });
         this.applyViewMode(newMode);
+        this.render(); // Re-render to apply new layout classes
     }
 
     /**
@@ -427,10 +505,18 @@ class App {
 
         if (mode === 'grid') {
             iconGrid.style.display = 'block';
-            iconList.style.display = 'none';
+            iconList.classList.add('hidden');
         } else {
             iconGrid.style.display = 'none';
-            iconList.style.display = 'block';
+            iconList.classList.remove('hidden');
+        }
+
+        // List view styles injection (Tailwind doesn't support data-attributes in arbitrary values easily for this dynamic switch without a wrapper class)
+        // We can handle this by toggling a class on the body
+        if (mode === 'list') {
+            document.body.classList.add('view-list');
+        } else {
+            document.body.classList.remove('view-list');
         }
     }
 
@@ -454,10 +540,12 @@ class App {
 
         if (theme === 'light') {
             iconSun.style.display = 'block';
-            iconMoon.style.display = 'none';
+            iconMoon.classList.add('hidden');
+            document.documentElement.classList.remove('dark');
         } else {
             iconSun.style.display = 'none';
-            iconMoon.style.display = 'block';
+            iconMoon.classList.remove('hidden');
+            document.documentElement.classList.add('dark');
         }
     }
 
@@ -597,7 +685,7 @@ class App {
             const category = dataManager.getCategoryById(id);
             const serviceCount = dataManager.getServiceCountByCategory(id);
             message.innerHTML = `<strong>"${this.escapeHtml(category.name)}"</strong> 카테고리를 삭제하시겠습니까?<br><br>
-                <small style="color: var(--color-danger);">⚠️ 이 카테고리의 서비스 ${serviceCount}개도 함께 삭제됩니다.</small>`;
+                <small class="text-red-500">⚠️ 이 카테고리의 서비스 ${serviceCount}개도 함께 삭제됩니다.</small>`;
         } else {
             const service = dataManager.getServiceById(id);
             message.innerHTML = `<strong>"${this.escapeHtml(service.name)}"</strong> 서비스를 삭제하시겠습니까?`;
@@ -754,13 +842,16 @@ class App {
      */
     showToast(message, type = 'success') {
         const toast = document.createElement('div');
-        toast.className = `toast ${type}`;
-        toast.innerHTML = `<span class="toast-message">${message}</span>`;
+        const borderColor = type === 'success' ? 'border-green-500' : 'border-red-500';
+        toast.className = `toast flex items-center gap-3 px-6 py-4 rounded-xl bg-white dark:bg-slate-800 shadow-2xl border-l-4 ${borderColor} animate-slide-up min-w-[300px]`;
+        toast.innerHTML = `<span class="toast-message font-medium text-slate-800 dark:text-slate-100">${message}</span>`;
         this.toastContainer.appendChild(toast);
 
         // 3초 후 제거
         setTimeout(() => {
-            toast.style.animation = 'toastSlideIn 0.3s ease reverse';
+            toast.style.transition = 'all 0.3s ease';
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateY(20px)';
             setTimeout(() => toast.remove(), 300);
         }, 3000);
     }
@@ -791,11 +882,17 @@ class App {
     /**
      * 서비스 메뉴 토글
      */
+    /**
+     * 서비스 메뉴 토글
+     */
     toggleServiceMenu(menu) {
         const wasActive = menu.classList.contains('active');
         this.closeAllServiceMenus();
         if (!wasActive) {
             menu.classList.add('active');
+            const dropdown = menu.querySelector('.service-menu-dropdown');
+            if (dropdown) dropdown.classList.remove('hidden');
+
             const card = menu.closest('.service-card');
             if (card) card.classList.add('menu-active');
         }
@@ -807,6 +904,9 @@ class App {
     closeAllServiceMenus() {
         document.querySelectorAll('.service-menu.active').forEach(menu => {
             menu.classList.remove('active');
+            const dropdown = menu.querySelector('.service-menu-dropdown');
+            if (dropdown) dropdown.classList.add('hidden');
+
             const card = menu.closest('.service-card');
             if (card) card.classList.remove('menu-active');
         });
