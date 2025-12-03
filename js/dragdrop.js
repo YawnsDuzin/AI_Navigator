@@ -220,14 +220,82 @@ function handleDrop(e) {
 /**
  * 플레이스홀더 생성
  */
+/**
+ * 플레이스홀더 생성
+ */
 function createPlaceholder() {
     placeholder = document.createElement('div');
     placeholder.className = 'drag-placeholder';
-    // CSS class handles styling now
-    placeholder.style.cssText = '';
+
+    if (draggedElement) {
+        const rect = draggedElement.getBoundingClientRect();
+        placeholder.style.width = `${rect.width}px`;
+        placeholder.style.height = `${rect.height}px`;
+    }
 }
 
-// ... (existing code)
+/**
+ * 플레이스홀더 제거
+ */
+function removePlaceholder() {
+    if (placeholder && placeholder.parentNode) {
+        placeholder.parentNode.removeChild(placeholder);
+    }
+    placeholder = null;
+}
+
+/**
+ * 드래그 후 요소 찾기 (삽입 위치 결정)
+ * 그리드 레이아웃 지원을 위해 X, Y 좌표 모두 사용
+ */
+function getDragAfterElement(container, x, y) {
+    const draggableElements = [...container.querySelectorAll('.service-card:not(.dragging):not(.drag-placeholder):not(.add-service-card)')];
+
+    if (draggableElements.length === 0) return null;
+
+    // 가장 가까운 요소 찾기
+    const closest = draggableElements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const boxCenterX = box.left + box.width / 2;
+        const boxCenterY = box.top + box.height / 2;
+        const dist = Math.hypot(x - boxCenterX, y - boxCenterY);
+
+        if (dist < closest.dist) {
+            return { dist: dist, element: child, box: box };
+        } else {
+            return closest;
+        }
+    }, { dist: Number.POSITIVE_INFINITY });
+
+    if (!closest.element) return null;
+
+    // 그리드 레이아웃 로직
+    // 1. 마우스가 요소보다 확실히 아래에 있으면 '다음' (다음 줄)
+    if (y > closest.box.bottom) {
+        return closest.element.nextElementSibling;
+    }
+
+    // 2. 마우스가 요소보다 확실히 위에 있으면 '이전' (이전 줄)
+    if (y < closest.box.top) {
+        return closest.element;
+    }
+
+    // 3. 같은 줄에 있는 경우 X축 기준으로 판단
+    if (x > closest.box.left + closest.box.width / 2) {
+        return closest.element.nextElementSibling;
+    } else {
+        return closest.element;
+    }
+}
+
+// ===== 카테고리 드래그앤드롭 =====
+
+let draggedCategory = null;
+let categoryPlaceholder = null;
+let isDraggingCategory = false;
+let dragStartX = 0;
+let dragStartY = 0;
+const DRAG_THRESHOLD = 5; // 드래그로 인식하기 위한 최소 이동 거리
 
 /**
  * 카테고리 드래그 시작
